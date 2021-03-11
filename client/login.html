@@ -187,7 +187,7 @@
         };
 
         const response = await fetch(
-          "http://localhost:3000/api/user/login",
+          "http://34.224.174.152:3000/api/user/login",
           options
         );
 
@@ -198,10 +198,13 @@
 
           console.log(`Token : ${token}, Name : ${name}`);
 
-          const responsePost = await fetch("http://localhost:3000/api/posts", {
-            method: "GET",
-            headers: { "auth-token": token },
-          });
+          const responsePost = await fetch(
+            "http://34.224.174.152:3000/api/posts",
+            {
+              method: "GET",
+              headers: { "auth-token": token },
+            }
+          );
           console.log(responsePost.headers.get("id"));
         } else {
           const error = response.headers.get("error");
