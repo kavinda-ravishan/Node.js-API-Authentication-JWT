@@ -197,6 +197,12 @@
           const name = response.headers.get("name");
 
           console.log(`Token : ${token}, Name : ${name}`);
+
+          const responsePost = await fetch("http://localhost:3000/api/posts", {
+            method: "GET",
+            headers: { "auth-token": token },
+          });
+          console.log(responsePost.headers.get("id"));
         } else {
           const error = response.headers.get("error");
           console.log(`Error : ${error}`);
