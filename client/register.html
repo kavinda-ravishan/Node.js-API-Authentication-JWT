@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
+    <title>Signup</title>
     <style>
       @import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap");
       * {
@@ -107,9 +107,6 @@
         user-select: none;
         padding-left: 5px;
       }
-      form .content .pass-link {
-        color: "";
-      }
       form .field input[type="submit"] {
         color: #fff;
         border: none;
@@ -124,26 +121,28 @@
       form .field input[type="submit"]:active {
         transform: scale(0.95);
       }
-      form .signup-link {
+      form .login-link {
         color: #262626;
         margin-top: 20px;
         text-align: center;
       }
-      form .pass-link a,
-      form .signup-link a {
+      form .login-link a {
         color: #4158d0;
         text-decoration: none;
       }
-      form .pass-link a:hover,
-      form .signup-link a:hover {
+      form .login-link a:hover {
         text-decoration: underline;
       }
     </style>
   </head>
   <body>
     <div class="wrapper">
-      <div class="title">Login Form</div>
+      <div class="title">Signup Form</div>
       <form action="#">
+        <div class="field">
+          <input id="name" type="text" required />
+          <label>User Name </label>
+        </div>
         <div class="field">
           <input id="email" type="text" required />
           <label>Email Address</label>
@@ -153,28 +152,26 @@
           <label>Password</label>
         </div>
         <div class="content">
-          <div class="checkbox">
-            <input type="checkbox" id="remember-me" />
-            <label for="remember-me">Remember me</label>
-          </div>
-          <div class="pass-link">
-            <a href="#">Forgot password?</a>
-          </div>
+          <div class="checkbox"></div>
         </div>
         <div class="field">
-          <input onclick="loginUser()" type="submit" value="Login" />
+          <input onclick="signupUser()" type="submit" value="Signup" />
         </div>
-        <div class="signup-link">Not a member? <a href="#">Signup now</a></div>
+        <div class="login-link">
+          Already a member? <a href="#">Login now</a>
+        </div>
       </form>
     </div>
 
     <script>
+      const userNameDom = document.getElementById("name");
       const userEmailDom = document.getElementById("email");
       const userPasswordDom = document.getElementById("password");
 
-      async function loginUser() {
+      async function signupUser() {
         //Send data
         const data = {
+          name: userNameDom.value,
           email: userEmailDom.value,
           password: userPasswordDom.value,
         };
@@ -187,16 +184,15 @@
         };
 
         const response = await fetch(
-          "http://localhost:3000/api/user/login",
+          "http://localhost:3000/api/user/register",
           options
         );
 
         const status = response.status;
         if (status === 200) {
-          const token = response.headers.get("auth-token");
-          const name = response.headers.get("name");
+          const id = response.headers.get("user-id");
 
-          console.log(`Token : ${token}, Name : ${name}`);
+          console.log(`ID : ${id}`);
         } else {
           const error = response.headers.get("error");
           console.log(`Error : ${error}`);

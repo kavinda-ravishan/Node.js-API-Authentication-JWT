@@ -26,6 +26,10 @@ app.use(express.json());
 app.use("/api/user", authRoute);
 app.use("/api/posts", postRoute);
 
+app.get("/", (req, res) => {
+  res.sendFile(`${__dirname}/client/home.html`);
+});
+
 app.listen(3000, () => {
   console.log("Server is Up and Running!");
 });

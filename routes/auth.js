@@ -4,10 +4,16 @@ const { registrValidation, loginValidation } = require("../validation");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-//Register the user Page
+//Login the user Page
 router.get("/login", async (req, res) => {
   const path = __dirname.replace("routes", "");
   res.sendFile(`${path}client/login.html`);
+});
+
+//Register the user Page
+router.get("/register", async (req, res) => {
+  const path = __dirname.replace("routes", "");
+  res.sendFile(`${path}client/register.html`);
 });
 
 //login
@@ -44,13 +50,13 @@ router.post("/register", async (req, res) => {
   //Valiate the data befor make a user
   const { error } = registrValidation(req.body);
   if (error) {
-    return res.status(400).send(error.details[0].message);
+    return res.status(400).header("error", error.details[0].message).end();
   }
 
   //Chech if the user already in the database
   const emailExist = await User.findOne({ email: req.body.email });
   if (emailExist) {
-    return res.status(400).send("Email already Exists!");
+    return res.status(400).header("error", "Email already Exists!").end();
   }
 
   //HASH the password
@@ -65,9 +71,10 @@ router.post("/register", async (req, res) => {
   });
   try {
     const saveUser = await user.save();
-    res.send({ user: saveUser._id });
+    res.setHeader("user-id", saveUser._id);
+    res.end();
   } catch (err) {
-    res.status(400).send(err);
+    res.status(400).header("error", err).end();
   }
 });
 
